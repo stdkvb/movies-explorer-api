@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
+
 const { JWT_SECRET = 'dev-secret' } = process.env;
-// const NonAuthorisedError = require('../errors/NonAuthorisedError');
+const NonAuthorisedError = require('../errors/NonAuthorisedError');
 
 const checkAuthorisation = (request, response, next) => {
   const cookie = request.cookies.access_token;

@@ -3,10 +3,10 @@ const jwt = require('jsonwebtoken');
 
 const { JWT_SECRET = 'dev-secret' } = process.env;
 const User = require('../models/user');
-// const NotFoundError = require('../errors/NotFoundError');
-// const BadRequestError = require('../errors/BadRequestError');
-// const NonAuthorisedError = require('../errors/NonAuthorisedError');
-// const ConflictError = require('../errors/ConflictError');
+const NotFoundError = require('../errors/NotFoundError');
+const BadRequestError = require('../errors/BadRequestError');
+const NonAuthorisedError = require('../errors/NonAuthorisedError');
+const ConflictError = require('../errors/ConflictError');
 
 const getUser = (request, response, next) => {
   const { userId } = request.params;

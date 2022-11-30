@@ -1,4 +1,7 @@
 const Movie = require('../models/movie');
+const BadRequestError = require('../errors/BadRequestError');
+const NotFoundError = require('../errors/NotFoundError');
+const ForbiddenError = require('../errors/ForbiddenError');
 
 const getMovie = (request, response, next) => {
   Movie.find({})
@@ -19,7 +22,7 @@ const createMovie = (request, response, next) => {
     movieId,
     nameRU,
     nameEN,
-} = request.params;
+  } = request.params;
   Movie.create({
     country,
     director,
