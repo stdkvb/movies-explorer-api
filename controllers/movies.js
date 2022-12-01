@@ -60,6 +60,7 @@ const deleteMovie = (request, response, next) => {
           .then(() => response.send({ message: 'Фильм удален.' }));
       }
     })
+    // eslint-disable-next-line consistent-return
     .catch((error) => {
       if (error.name === 'CastError') {
         return next(new BadRequestError('Фильм с указанным _id не найден.'));
