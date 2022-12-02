@@ -9,13 +9,8 @@ const NonAuthorisedError = require('../errors/NonAuthorisedError');
 const ConflictError = require('../errors/ConflictError');
 
 const getUser = (request, response, next) => {
-  const { userId } = request.params;
-  User.findById(userId)
-    .then((user) => {
-      if (!user) {
-        throw new NotFoundError('Пользователь по указанному _id не найден.');
-      } response.send(user);
-    })
+  User.findById(request.user_Id)
+    .then((user) => response.send(user))
     .catch(next);
 };
 
@@ -62,6 +57,8 @@ const updateUser = (request, response, next) => {
     .catch((error) => {
       if (error.name === 'ValidationError') {
         next(new BadRequestError('Некорректные данные при обновлении пользователя.'));
+      } else if (error.code === 11000) {
+        next(new ConflictError('Пользователь с таким email уже существует.'));
       } else {
         next(error);
       }
@@ -74,7 +71,7 @@ const login = (request, response, next) => {
   User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new NonAuthorisedError('Такого пользователя не существует.');
+        throw new NonAuthorisedError('Невереный email или пароль.');
       }
       return bcrypt.compare(password, user.password)
         .then((isValidPassword) => {

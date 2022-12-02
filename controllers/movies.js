@@ -22,7 +22,7 @@ const createMovie = (request, response, next) => {
     movieId,
     nameRU,
     nameEN,
-  } = request.params;
+  } = request.body;
   Movie.create({
     country,
     director,
@@ -52,7 +52,7 @@ const deleteMovie = (request, response, next) => {
   Movie.findById(movieId)
     .then((movie) => {
       if (!movie) {
-        throw new NotFoundError('Переданы некорректные данные при удалении фильма.');
+        throw new NotFoundError('Фильм по переданному id не найденю');
       } else if (request.user._id.toString() !== movie.owner.toString()) {
         throw new ForbiddenError('Нет прав на удаление фильма.');
       } else {
@@ -60,12 +60,12 @@ const deleteMovie = (request, response, next) => {
           .then(() => response.send({ message: 'Фильм удален.' }));
       }
     })
-    // eslint-disable-next-line consistent-return
     .catch((error) => {
       if (error.name === 'CastError') {
-        return next(new BadRequestError('Фильм с указанным _id не найден.'));
+        next(new BadRequestError('Фильм с указанным _id не найден.'));
+      } else {
+        next(error);
       }
-      next(error);
     });
 };
 
