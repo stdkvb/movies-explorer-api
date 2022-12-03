@@ -9,7 +9,7 @@ const NonAuthorisedError = require('../errors/NonAuthorisedError');
 const ConflictError = require('../errors/ConflictError');
 
 const getUser = (request, response, next) => {
-  User.findById(request.user_Id)
+  User.findById(request.user._id)
     .then((user) => response.send(user))
     .catch(next);
 };
